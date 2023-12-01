@@ -47,10 +47,8 @@ cd ~/bin
 git clone https://android.googlesource.com/tools/repo.git -b v1.13.9.3 repo_tool
 cd repo_tool
 git checkout -b v1.13.9.3
-```
-
-Add the following line to the ~/.bashrc file to ensure that the repo_tool folder is in your PATH variable
 export PATH=~/bin/repo_tool:$PATH
+```
 
 ### Set up locales if you haven't setup already
 
@@ -64,8 +62,10 @@ export LC_ALL=en_US.UTF-8
 
 ### Run below instructions if you don't have your account identity in ~/.gitconfig
 
+```bash
 git config --global user.email you@example.com
 git config --global user.name "Your Name"
+```
 
 ### (Recommended) Apply these git configurations to address the remote hung-up issues while git cloning
 
@@ -109,6 +109,7 @@ if the output is not bash, enter into the bash shell by entering the below comma
 bash
 ```
 
+Export SHELL
 ```bash
 export SHELL=/bin/bash
 ```
