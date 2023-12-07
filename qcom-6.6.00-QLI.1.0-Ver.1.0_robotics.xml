@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote fetch="https://github.com/quic-yocto" name="github" review="github.com"/>
+  <remote fetch="https://git.codelinaro.org/clo/le/" name="clo-le" review="null"/>
+  <default remote="github" revision="refs/heads/kirkstone" sync-j="8"/>
+
+  <project name="meta-ros" path="layers/meta-ros" remote="clo-le" revision="a0c6d2a5774e279291b3e7a0f4495cf156d93c0a" upstream="refs/heads/ros.qclinux.1.0.r1-rel"/>
+  <project name="meta-qcom-robotics" path="layers/meta-qcom-robotics" revision="02c294add3f43cb4b50a76eebc51f6e021d85b51" upstream="refs/heads/kirkstone"/>
+  <project name="meta-qcom-robotics-distro" path="layers/meta-qcom-robotics-distro" revision="4cd5d6bf20b42bf7b887292f2dd071fadd33bf30" upstream="refs/heads/kirkstone">
+    <linkfile dest="setup-robotics-environment" src="set_bb_env.sh"/>
+  </project>
+  <project name="meta-qcom-robotics-sdk" path="layers/meta-qcom-robotics-sdk" revision="d1575eb5d858c178c47a6aa8d116dc1fb801b631" upstream="refs/heads/kirkstone">
+    <copyfile dest="qirp-build" src="scripts/qirp-build" />
+  </project>
+  <include name="qcom-6.6.00-QLI.1.0-Ver.1.0.xml" />
+</manifest>
