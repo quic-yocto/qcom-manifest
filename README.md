@@ -101,6 +101,7 @@ git config --global http.https://qpm-git.qualcomm.com.followRedirects true
 
 ### Add below entries to your .netrc in the homedir (~/.netrc)
 
+```bash
 machine chipmaster2.qti.qualcomm.com
 login [your login id]
 password [your password]
@@ -112,13 +113,16 @@ password [your password]
 machine qpm-git.qualcomm.com
 login [your login id]
 password [your password]
+```
 
 ## Download the Yocto Project BSP
 
+```bash
 mkdir [release]
 cd [release]
 repo init -u https://github.com/quic-yocto/qcom-manifest -b [branch name] -m [release manifest]
 repo sync
+```
 
 Each branch will have detailed READMEs describing exact syntax.
 
@@ -166,8 +170,7 @@ MACHINE=[machine] DISTRO=qcom-[backend] source setup-environment
 [backend]   Graphics backend type
 - qcom-wayland     meta-qcom-distro
 
-Examples:
-- Setup for Wayland.
+Example for setup Wayland:
 
 ```bash
 MACHINE=qcm6490 DISTRO=qcom-wayland source setup-environment
