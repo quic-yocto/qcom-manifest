@@ -4,7 +4,7 @@ This git repository is used to download manifests for QCOM Linux Yocto BSP relea
 
 The branch will be based on the release type Linux with release manifests in each branch tied to the base releases.
 
-For QCOM Linux Yocto BSP releases the manifest branches will be named as qcom-linux-<Yocto-Project-release>,
+For QCOM Linux Yocto BSP releases the manifest branches will be named as qcom-linux-[Yocto-Project-release],
 so qcom-linux-kirkstone with all manifests tied to releases on Kirkstone in this branch.
 
 If you already having standard yocto environment, skip below prepare host environment steps
@@ -18,9 +18,20 @@ Install below packages to prepare your host environment for Yocto build
 
 ```bash
 sudo apt update
-sudo apt install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential \
-chrpath socat cpio python-is-python3 python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping \
-libsdl1.2-dev xterm tar locales net-tools rsync sudo vim curl zstd liblz4-tool libssl-dev bc lzop
+```
+
+Install Yocto Build Dependencies
+```bash
+apt install gawk wget git diffstat unzip texinfo gcc build-essential \
+    chrpath socat cpio python3 python3-pip python3-pexpect xz-utils \
+    debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa \
+    libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd \
+    liblz4-tool
+```
+
+Install few additional packages required
+```bash
+sudo apt install locales tar file libxml-opml-simplegen-perl python-is-python3
 ```
 
 ### Ensure bash is the default shell
@@ -30,10 +41,22 @@ Run the following command to confirm that the output is bash
 ls -la /bin/sh
 ```
 
-if the output is not pointing to /bin/bash, modify the Ubuntu shell to bash with the following command
+If the output is not pointing to /bin/bash, modify the Ubuntu shell to bash with the following command
 
 ```bash
 sudo ln -sf /bin/bash /bin/sh
+```
+
+Confirm that the current working shell is bash. Run the following command and check the output
+
+```bash
+printf $0
+```
+
+The expected output of the command should be bash. If not, enter the bash shell by running the following command
+
+```bash
+bash
 ```
 
 ### Install the `repo` utility
@@ -67,19 +90,35 @@ git config --global user.email you@example.com
 git config --global user.name "Your Name"
 ```
 
-### (Recommended) Apply these git configurations to address the remote hung-up issues while git cloning
+### Apply these git configurations
 
 ```bash
 git config --global http.postBuffer 1048576000
 git config --global http.maxRequestBuffer 1048576000
+git config --global http.https://chipmaster2.qti.qualcomm.com.followRedirects true
+git config --global http.https://qpm-git.qualcomm.com.followRedirects true
 ```
 
+### Add below entries in ~/.netrc
+
+# Add below entries to your .netrc in the homedir (~/.netrc)
+machine chipmaster2.qti.qualcomm.com
+login [your login id]
+password [your password]
+
+machine chipcode.qti.qualcomm.com
+login [your login id]
+password [your password]
+
+machine qpm-git.qualcomm.com
+login [your login id]
+password [your password]
 
 ## Download the Yocto Project BSP
 
-mkdir <release>
-cd <release>
-repo init -u https://github.com/quic-yocto/qcom-manifest -b <branch name> [ -m <release manifest>]
+mkdir [release]
+cd [release]
+repo init -u https://github.com/quic-yocto/qcom-manifest -b [branch name] -m [release manifest]
 repo sync
 
 Each branch will have detailed READMEs describing exact syntax.
@@ -90,6 +129,13 @@ To download the `qcom-6.6.00-QLI.1.0-Ver.1.0` release
 
 ```bash
 repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.00-QLI.1.0-Ver.1.0.xml 
+repo sync
+```
+
+To download the `qcom-6.6.00-QLI.1.0-Ver.1.1` release
+
+```bash
+repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.00-QLI.1.0-Ver.1.1.xml 
 repo sync
 ```
 
@@ -114,11 +160,12 @@ Export SHELL
 export SHELL=/bin/bash
 ```
 
-[MACHINE=<machine>] [DISTRO=qcom-<backend>] source setup-environment
+MACHINE=[machine] DISTRO=qcom-[backend] source setup-environment
 
-<machine>   defaults to `qcm6490`
-<backend>   Graphics backend type
-    qcom-wayland     meta-qcom-distro
+[machine]   defaults to `qcm6490`
+
+[backend]   Graphics backend type
+- qcom-wayland     meta-qcom-distro
 
 Examples:
 - Setup for Wayland.
@@ -129,18 +176,21 @@ MACHINE=qcm6490 DISTRO=qcom-wayland source setup-environment
 
 ## Build an image
 
-bitbake <image recipe>
+bitbake [image recipe]
 
 Some image recipes:
 
-Image Name           	| Description
----------------------	|---------------------------------------------------
-qcom-console-image     	| core image with boot to shell
+Image Name           	    	| Description
+---------------------	    	|---------------------------------------------------
+qcom-minimal-image          	| A minimal rootfs image that boots to shell.
+qcom-console-image          	| Boot to shell with Package group to bring in all basic packages.
+qcom-multimedia-image       	| Image recipe includes recipes for multimedia software components, such as, audio, bluetooth, camera, computer vision, display and video.
+qcom-multimedia-test-image  	| This image recipe includes tests
 
 Example command:
 
 ```bash
-bitbake qcom-console-image
+bitbake qcom-multimedia-image
 ```
 
 ## Flash the image
