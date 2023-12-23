@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote fetch="https://github.com/quic-yocto" name="github" review="github.com"/>
+  <remote fetch="https://git.yoctoproject.org" name="yocto" review="git.yoctoproject.org"/>
+  <remote fetch="https://github.com/openembedded" name="oe" review="github.com"/>
+  <default remote="github" revision="refs/heads/kirkstone" sync-j="8"/>
+
+  <project name="meta-qcom" path="layers/meta-qcom" remote="yocto" revision="23e9084275f90bafdabfca78974b6826d2c165a4" upstream="refs/heads/kirkstone"/>
+  <project name="meta-openembedded" path="layers/meta-openembedded" remote="oe" revision="529620141e773080a6a7be4615fb7993204af883" upstream="refs/heads/kirkstone"/>
+  <project name="poky" path="layers/poky" remote="yocto" revision="d8d6d921fad14b82167d9f031d4fca06b5e01883" upstream="refs/heads/kirkstone"/>
+  <project name="meta-security" path="layers/meta-security" remote="yocto" revision="06c240c3c235fa06fe724e278d53463ac67cc26b" upstream="refs/heads/kirkstone"/>
+  <project name="meta-virtualization" path="layers/meta-virtualization" remote="yocto" revision="e60f59f3567b78286ea34337dbae468a5f18f1c6" upstream="refs/heads/kirkstone"/>
+  <project name="meta-selinux" path="layers/meta-selinux" remote="yocto" revision="a401f4b2816a0b41ce8d9351542658c721935bcd" upstream="refs/heads/kirkstone"/>
+
+  <project name="meta-qcom-hwe" path="layers/meta-qcom-hwe" revision="b72a8e7f471d7f535d14f41b2dbb9511a6cd6eee" upstream="refs/heads/kirkstone"/>
+  <project name="meta-qcom-distro" path="layers/meta-qcom-distro" revision="be6863fd0e9132179c954bf833f5c029ba9f90ea" upstream="refs/heads/kirkstone">
+    <linkfile dest="setup-environment" src="set_bb_env.sh"/>
+  </project>
+</manifest>
