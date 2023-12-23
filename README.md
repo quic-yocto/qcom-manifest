@@ -99,9 +99,8 @@ git config --global http.https://chipmaster2.qti.qualcomm.com.followRedirects tr
 git config --global http.https://qpm-git.qualcomm.com.followRedirects true
 ```
 
-### Add below entries in ~/.netrc
+### Add below entries to your .netrc in the homedir (~/.netrc)
 
-# Add below entries to your .netrc in the homedir (~/.netrc)
 machine chipmaster2.qti.qualcomm.com
 login [your login id]
 password [your password]
