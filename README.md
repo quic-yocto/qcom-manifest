@@ -7,7 +7,9 @@ The branch will be based on the release type Linux with release manifests in eac
 For QCOM Linux Yocto BSP releases the manifest branches will be named as qcom-linux-[Yocto-Project-release],
 so qcom-linux-kirkstone with all manifests tied to releases on Kirkstone in this branch.
 
-If you already having standard yocto environment, skip below prepare host environment steps
+Below procedure assumes that you have gone through [qualcomm-linux-preview](https://www.qualcomm.com/products/internet-of-things/industrial/building-enterprise/qualcomm-linux-preview) and have a [valid Qualcomm account](https://www.qualcomm.com/support)
+
+If you are already having standard yocto environment, skip below prepare Host setup steps
 
 ## Host Setup
 
@@ -22,7 +24,7 @@ sudo apt update
 
 Install Yocto Build Dependencies
 ```bash
-apt install gawk wget git diffstat unzip texinfo gcc build-essential \
+sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential \
     chrpath socat cpio python3 python3-pip python3-pexpect xz-utils \
     debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa \
     libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd \
@@ -103,10 +105,6 @@ git config --global http.https://qpm-git.qualcomm.com.followRedirects true
 
 ```bash
 machine chipmaster2.qti.qualcomm.com
-login [your login id]
-password [your password]
-
-machine chipcode.qti.qualcomm.com
 login [your login id]
 password [your password]
 
@@ -197,10 +195,11 @@ bitbake qcom-multimedia-image
 
 ## Flash the image
 
-Refer to User Guide on [qualcomm-linux-preview](https://www.qualcomm.com/products/internet-of-things/industrial/building-enterprise/qualcomm-linux-preview)
-to complete Dev Kit setup and flash the artifacts.
+To flash the generated build, see the [Flash software](https://docs.qualcomm.com/bundle/resource/topics/80-70014-251/flash_rb3_software_0.html)
 
 
 ## References
 
-[Standard Yocto environment](https://docs.yoctoproject.org/4.0.13/brief-yoctoprojectqs/index.html)
+If you are new to the Yocto project, you may try your first build as documented in the Yocto project at [Standard Yocto environment](https://docs.yoctoproject.org/4.0.14/singleindex.html#document-brief-yoctoprojectqs/index)
+
+The complete index of Yocto project docs is available at [Yocto project docs](https://docs.yoctoproject.org/4.0.14/ singleindex.html#welcome-to-the-yocto-project-documentation)
