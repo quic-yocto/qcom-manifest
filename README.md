@@ -202,4 +202,4 @@ To flash the generated build, see the [Flash software](https://docs.qualcomm.com
 
 If you are new to the Yocto project, you may try your first build as documented in the Yocto project at [Standard Yocto environment](https://docs.yoctoproject.org/4.0.14/singleindex.html#document-brief-yoctoprojectqs/index)
 
-The complete index of Yocto project docs is available at [Yocto project docs](https://docs.yoctoproject.org/4.0.14/ singleindex.html#welcome-to-the-yocto-project-documentation)
+The complete index of Yocto project docs is available at [Yocto project docs](https://docs.yoctoproject.org/4.0.14/singleindex.html#welcome-to-the-yocto-project-documentation)
