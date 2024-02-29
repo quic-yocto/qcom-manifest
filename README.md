@@ -140,6 +140,14 @@ repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone
 repo sync
 ```
 
+To download the `qcom-6.6.13-QLI.1.0-Ver.1.2` release
+
+```bash
+repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.13-QLI.1.0-Ver.1.2.xml
+repo sync
+```
+
+## Setup the build folder for a BSP release
 ## Setup the build folder for a BSP release
 
 Build commands needs to be executed in bash shell environment
@@ -164,14 +172,22 @@ export SHELL=/bin/bash
 MACHINE=[machine] DISTRO=qcom-[backend] source setup-environment
 
 [machine]   defaults to `qcm6490`
+(OR)
+[machine]   selects to `qcs8550`
 
 [backend]   Graphics backend type
 - qcom-wayland     meta-qcom-distro
 
-Example for setup Wayland:
+Example for setup Wayland, machine qcm6490:
 
 ```bash
 MACHINE=qcm6490 DISTRO=qcom-wayland source setup-environment
+```
+
+Example for setup Wayland, machine qcs8550:
+
+```bash
+MACHINE=qcs8550 DISTRO=qcom-wayland source setup-environment
 ```
 
 ## Build an image
