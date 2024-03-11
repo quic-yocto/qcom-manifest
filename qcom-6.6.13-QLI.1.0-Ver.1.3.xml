@@ -12,7 +12,7 @@
   <project name="meta-virtualization" path="layers/meta-virtualization" remote="yocto" revision="88327090d26955a678c6f8bd2585aad4d802f6c4" upstream="refs/heads/kirkstone"/>
   <project name="meta-selinux" path="layers/meta-selinux" remote="yocto" revision="a401f4b2816a0b41ce8d9351542658c721935bcd" upstream="refs/heads/kirkstone"/>
 
-  <project name="meta-qcom-hwe" path="layers/meta-qcom-hwe" revision="f21c663a8f2e5df1d8323f59536e26da83433271" upstream="refs/heads/kirkstone"/>
+  <project name="meta-qcom-hwe" path="layers/meta-qcom-hwe" revision="243b56cc8dc687e88e1b663123995ef8cc9b2747" upstream="refs/heads/kirkstone"/>
   <project name="meta-qcom-distro" path="layers/meta-qcom-distro" revision="a6437e538315fe47359e2eb9bcc4b01ba589b99b" upstream="refs/heads/kirkstone">
     <linkfile dest="setup-environment" src="set_bb_env.sh"/>
   </project>
