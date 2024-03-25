@@ -4,12 +4,12 @@
   <remote fetch="https://git.codelinaro.org/clo/le/" name="clo-le" review="null"/>
   <default remote="github" revision="refs/heads/kirkstone" sync-j="8"/>
 
-  <project name="meta-ros" path="layers/meta-ros" remote="clo-le" revision="0f8b2a4b67d5501c737533fb18a40eaa826bbb3a" upstream="refs/heads/ros.qclinux.1.0.r1-rel"/>
-  <project name="meta-qcom-robotics" path="layers/meta-qcom-robotics" revision="29c4f3c4b7a4718f775083d792b666e86c907224" upstream="refs/heads/kirkstone"/>
-  <project name="meta-qcom-robotics-distro" path="layers/meta-qcom-robotics-distro" revision="72673ac7d711ebb585d6835ecc529ec82ff1aa55" upstream="refs/heads/kirkstone">
+  <project name="meta-ros" path="layers/meta-ros" remote="clo-le" revision="7bb93715aa802b47d50f923c3ce5d6c2c5f8adb4" upstream="refs/heads/ros.qclinux.1.0.r1-rel"/>
+  <project name="meta-qcom-robotics" path="layers/meta-qcom-robotics" revision="6be0cd5b510de425d1b56c8a1ca1bfd4cd9c7756" upstream="refs/heads/kirkstone"/>
+  <project name="meta-qcom-robotics-distro" path="layers/meta-qcom-robotics-distro" revision="5a6ce2284ca121917a53fcaca670caf751c6aba7" upstream="refs/heads/kirkstone">
     <linkfile dest="setup-robotics-environment" src="set_bb_env.sh"/>
   </project>
-  <project name="meta-qcom-robotics-sdk" path="layers/meta-qcom-robotics-sdk" revision="093e9fc31c2c9b65304287d6f40e209a4c240eb0" upstream="refs/heads/kirkstone">
+  <project name="meta-qcom-robotics-sdk" path="layers/meta-qcom-robotics-sdk" revision="3c1bba60459eb6416effdf6a1b826702292ce0e7" upstream="refs/heads/kirkstone">
     <copyfile dest="qirp-build" src="scripts/qirp-build" />
   </project>
   <project name="meta-qcom-qim-product-sdk" path="layers/meta-qcom-qim-product-sdk" revision="180742d0f05b848e515dd3b3e8199260fb419bf3" upstream="refs/heads/kirkstone"/>
