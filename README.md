@@ -11,57 +11,49 @@ Below procedure assumes that you have gone through [qualcomm-linux-preview](http
 
 If you are already having standard yocto environment, skip below prepare Host setup steps
 
-## Host Setup
+
+# Qualcomm Tools
+
+Run the following commands to set up Qualcomm Package Manager. It is used to generate
+personalized access token to access Qualcomm proprietary software, for example, to fetch
+binary SDKs during SDK build.
+
+## Follow below instructions to install qsc-cli
+
+- **Install curl if you haven't installed already**
+```bash
+sudo apt install curl
+```
+
+- **Download and Install the debian package for qsc-cli**
+```bash
+curl -L https://softwarecenter.qualcomm.com/api/download/software/qsc/linux/latest.deb -o qsc_installer.deb
+sudo dpkg -i qsc_installer.deb
+```
+
+- **log in to qsc-cli**
+```bash
+qsc-cli login -u [username]
+```
+
+# Host Setup
 
 The host machine needs a few setup operations to ensure the required software tools are ready
 The released software requires the Ubuntu 20.04 host machine. Follow below instructions
 
-Install below packages to prepare your host environment for Yocto build
+## Install below packages to prepare your host environment for Yocto build
 
 ```bash
 sudo apt update
-```
-
-Install Yocto Build Dependencies
-```bash
 sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential \
     chrpath socat cpio python3 python3-pip python3-pexpect xz-utils \
     debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa \
     libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd \
-    liblz4-tool
+    liblz4-tool locales tar python-is-python3 file libxml-opml-simplegen-perl \
+    vim whiptail
 ```
 
-Install few additional packages required
-```bash
-sudo apt install locales tar file libxml-opml-simplegen-perl python-is-python3
-```
-
-### Ensure bash is the default shell
-Run the following command to confirm that the output is bash
-
-```bash
-ls -la /bin/sh
-```
-
-If the output is not pointing to /bin/bash, modify the Ubuntu shell to bash with the following command
-
-```bash
-sudo ln -sf /bin/bash /bin/sh
-```
-
-Confirm that the current working shell is bash. Run the following command and check the output
-
-```bash
-printf $0
-```
-
-The expected output of the command should be bash. If not, enter the bash shell by running the following command
-
-```bash
-bash
-```
-
-### Install the `repo` utility
+## Install the `repo` utility
 
 To use this manifest repo, the repo tool must be installed first.
 To install repo, run these commands:
@@ -69,48 +61,93 @@ To install repo, run these commands:
 ```bash
 mkdir -p ~/bin
 cd ~/bin
-git clone https://android.googlesource.com/tools/repo.git -b v1.13.9.3 repo_tool
+#Note if you already have a previous directory of repo_tool, you can delete it
+rm -rf ~/bin/repo_tool
+git clone https://android.googlesource.com/tools/repo.git -b v2.41 repo_tool
 cd repo_tool
-git checkout -b v1.13.9.3
+git checkout -b v2.41
 export PATH=~/bin/repo_tool:$PATH
 ```
 
-### Set up locales if you haven't setup already
+If the above method did not work you can try below commands for repo installation
+
+**Note:** latest repo version works with python3
+```bash
+mkdir -p ~/bin
+curl https://raw.githubusercontent.com/GerritCodeReview/git-repo/v2.41/repo -o ~/bin/repo && chmod +x ~/bin/repo
+export PATH=~/bin:$PATH
+```
+
+## Add your Qualcomm login credentials to .netrc file in your home directory
+
+**Log in to qsc-cli to generate the PAT ( Personalized Access Token )**
+```bash
+qsc-cli login -u <username>
+```
+
+**Run below command to generate the PAT**
+```bash
+qsc-cli pat --get
+```
+
+This command will give output as captured in the Info note below
+The last line in this output is the token, which can be used to access
+Qualcomm Proprietary repositories. This token will expire in two weeks
+```bash
+qsc-cli pat --get
+```
+[Info]: Starting qsc-cli version 0.0.0.9
+
+**5LThNlklb55mMVLB5C2KqUGU2jCF**
+
+vim ~/.netrc # add below entries
+
+```bash
+machine chipmaster2.qti.qualcomm.com
+login <your Qualcomm login id>
+password <your PAT>
+
+machine qpm-git.qualcomm.com
+login <your Qualcomm login id>
+password <your PAT>
+```
+
+## Set up locales if you haven't setup already, by using the following commands
 
 ```bash
 sudo locale-gen en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 ```
 
-### Run below instructions if you don't have your account identity in ~/.gitconfig
+## Update git configurations
 
+**Check if your identity is configured in .gitconfig**
+```bash
+git config --get user.email
+git config --get user.name
+```
+
+**Run the following commands if you do not have your account identity set in .gitconfig**
 ```bash
 git config --global user.email you@example.com
 git config --global user.name "Your Name"
 ```
 
-### Apply these git configurations
+**Add below UI color option for output of console**
+```bash
+git config --global color.ui auto
+```
 
+**Add below configuration required to fetch Qualcomm proprietary sources/binaries**
 ```bash
 git config --global http.postBuffer 1048576000
 git config --global http.maxRequestBuffer 1048576000
+git config --global http.lowSpeedLimit 0
+git config --global http.lowSpeedTime 999999
 git config --global http.https://chipmaster2.qti.qualcomm.com.followRedirects true
 git config --global http.https://qpm-git.qualcomm.com.followRedirects true
-```
-
-### Add below entries to your .netrc in the homedir (~/.netrc)
-
-```bash
-machine chipmaster2.qti.qualcomm.com
-login [your login id]
-password [your password]
-
-machine qpm-git.qualcomm.com
-login [your login id]
-password [your password]
 ```
 
 ## Download the Yocto Project BSP
@@ -124,56 +161,20 @@ repo sync
 
 Each branch will have detailed READMEs describing exact syntax.
 
-## Examples
+**Example:**
 
-To download the `qcom-6.6.00-QLI.1.0-Ver.1.0` release
-
-```bash
-repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.00-QLI.1.0-Ver.1.0.xml 
-repo sync
-```
-
-To download the `qcom-6.6.00-QLI.1.0-Ver.1.1` release
+To download the `qcom-6.6.17-QLI.1.0-Ver.1.3` release
 
 ```bash
-repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.00-QLI.1.0-Ver.1.1.xml 
-repo sync
-```
-
-To download the `qcom-6.6.13-QLI.1.0-Ver.1.2` release
-
-```bash
-repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.13-QLI.1.0-Ver.1.2.xml
+repo init -u https://github.com/quic-yocto/qcom-manifest -b qcom-linux-kirkstone -m qcom-6.6.17-QLI.1.0-Ver.1.3.xml
 repo sync
 ```
 
 ## Setup the build folder for a BSP release
-## Setup the build folder for a BSP release
-
-Build commands needs to be executed in bash shell environment
-To confirm current working shell is bash or not by running below command and check the output
-
-```bash
-echo $0
-```
-
-Output of above command should be bash
-if the output is not bash, enter into the bash shell by entering the below command in the command prompt
-
-```bash
-bash
-```
-
-Export SHELL
-```bash
-export SHELL=/bin/bash
-```
 
 MACHINE=[machine] DISTRO=qcom-[backend] source setup-environment
 
 [machine]   defaults to `qcm6490`
-(OR)
-[machine]   selects to `qcs8550`
 
 [backend]   Graphics backend type
 - qcom-wayland     meta-qcom-distro
@@ -184,17 +185,11 @@ Example for setup Wayland, machine qcm6490:
 MACHINE=qcm6490 DISTRO=qcom-wayland source setup-environment
 ```
 
-Example for setup Wayland, machine qcs8550:
-
-```bash
-MACHINE=qcs8550 DISTRO=qcom-wayland source setup-environment
-```
-
 ## Build an image
 
 bitbake [image recipe]
 
-Some image recipes:
+**Some image recipes:**
 
 Image Name           	    	| Description
 ---------------------	    	|---------------------------------------------------
@@ -203,11 +198,17 @@ qcom-console-image          	| Boot to shell with Package group to bring in all 
 qcom-multimedia-image       	| Image recipe includes recipes for multimedia software components, such as, audio, bluetooth, camera, computer vision, display and video.
 qcom-multimedia-test-image  	| This image recipe includes tests
 
-Example command:
+**Example command:**
 
 ```bash
 bitbake qcom-multimedia-image
 ```
+
+## To Include add-on layers, refer below README.md files
+
+1. [Qualcomm Intelligent Multimedia Product SDK](https://github.com/quic-yocto/meta-qcom-qim-product-sdk/blob/kirkstone/README.md)
+2. [Realtime Linux](https://github.com/quic-yocto/meta-qcom-realtime/blob/kirkstone/README.md)
+3. [Qualcomm Intelligent Robotics Product SDK](https://github.com/quic-yocto/meta-qcom-robotics-sdk/blob/kirkstone/README.md)
 
 ## Flash the image
 
